@@ -89,9 +89,10 @@ def export_ics(file, course_info):
 
 
 def pm_convert(time):
-    print("found the class time is at afternoon, converting...")
+    print("correcting to .ics time...")
     result = int(time)
     if result < 8:
+        print('found this this pm time, converting...')
         result += 12
 
     if result < 10:
