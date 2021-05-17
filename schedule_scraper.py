@@ -5,7 +5,7 @@ import getpass
 
 # replace "YOUR UW NET ID" and "YOUR PASSWORD"to your own UW netID and password
 def get_schedule(uwnetid="YOUR UW NET ID", password="YOUR PASSWORD"):
-    weburl = 'https://sdb.admin.uw.edu/sisStudents/UWNetID/vschedule.aspx?Q=2'  # link to visual schedule
+    weburl = 'https://sdb.admin.uw.edu/sisStudents/UWNetID/vschedule.aspx?Q=2'  # link to visual schedule. 1 for winter, 2 for spring, 3 for summer, and 4 for autumn
     session = requests.Session()
     r = session.get(weburl)
     soup = BeautifulSoup(r.text, 'html.parser')
@@ -33,7 +33,7 @@ def get_schedule(uwnetid="YOUR UW NET ID", password="YOUR PASSWORD"):
         }
         session.post(url, data=data)
         soup = BeautifulSoup(session.get(weburl).text, 'html.parser')
-    if soup.find("h1", text="Visual Schedule - Spring 2021"):
+    if 'Visual Schedule' in soup.find("h1").text:
         print('login complete! looking at your classes')
         block_lists = soup.find_all("td", {"colspan": "1"})
         week_days = ["MO", "TU", "WE", "TH", "FR"]
