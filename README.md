@@ -5,3 +5,9 @@
 ## Known Issues
  - You can't use Shadowsock or similar survices while running the program due (maybe) to SSL issues
  - program will load infinitely if you run with getpass() in PyCharm as you type in your accounts
+ - program do not work for in-person classes
+## TODO:
+- [ ] Fix Issues
+- [ ] Make support for in-person classes
+- [ ] parse building location from campus map to the ics file
+- [ ] Convert final exam schedule as well
