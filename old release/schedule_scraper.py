@@ -5,7 +5,7 @@ import getpass
 
 # replace "YOUR UW NET ID" and "YOUR PASSWORD"to your own UW netID and password
 def get_schedule(uwnetid="YOUR UW NET ID", password="YOUR PASSWORD"):
-    weburl = 'https://sdb.admin.uw.edu/sisStudents/UWNetID/vschedule.aspx?Q=2'  # link to visual schedule
+    weburl = 'https://sdb.admin.uw.edu/sisStudents/UWNetID/vschedule.aspx?Q=2'  # link to visual schedule. 1 for winter, 2 for spring, 3 for summer, and 4 for autumn
     session = requests.Session()
     r = session.get(weburl)
     soup = BeautifulSoup(r.text, 'html.parser')
@@ -59,9 +59,8 @@ def get_schedule(uwnetid="YOUR UW NET ID", password="YOUR PASSWORD"):
 def export_ics(file, course_info):
     print("export " + course_info[0] + " to your ics file")
     start_date = str(20210305)  # the day when your classes should start, format as YYYYMMDD
-    end_date = str(20210601)  # the day when your classes should end, format as YYYYMMDD
+    end_date = str(20210401)  # the day when your classes should end, format as YYYYMMDD
     time = course_info[2].split("-")
-    print(course_info[2])
     hr_1 = ''
     min_1 = ''
     hr_2 = ''
