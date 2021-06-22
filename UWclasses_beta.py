@@ -34,6 +34,7 @@ def get_schedule(uwnetid, pass_, quarter, day_start, day_end, filename='visual_s
     weburl = 'https://sdb.admin.uw.edu/sisStudents/uwnetid/schedule.aspx?Q=' + qtr[
         quarter.lower()]  # link to schedule
     session = requests.Session()
+    session.trust_env = None  # correctly handle the case with Shadowsocks turned on
     r = session.get(weburl)
     soup = BeautifulSoup(r.text, 'html.parser')
     # inspired from https://github.com/ApolloZhu/INFO200/blob/master/script/cec.py
@@ -64,7 +65,26 @@ def get_schedule(uwnetid, pass_, quarter, day_start, day_end, filename='visual_s
         table = soup.find('tbody', {'class': 'sps-data'}).find_all('tr')
         class_name, meet_days, meet_time, class_loc, class_instru = "", "", "", "", ""
         f = open(filename, 'w', encoding='utf-8')  # name of your ics file generated, default is 'visual_schedule.ics'
-        f.write('BEGIN:VCALENDAR\n')
+        f.write('BEGIN:VCALENDAR\n'
+                'VERSION:2.0\n'
+                'PRODID:-//UW Schedule parser by eyhc1\n'
+                'BEGIN:VTIMEZONE\n'
+                'TZID:America/Los_Angeles\n'
+                'BEGIN:STANDARD\n'
+                'DTSTART:19710101T020000\n'
+                'TZOFFSETTO:-0800\n'
+                'TZOFFSETFROM:-0700\n'
+                'TZNAME:PST\n'
+                'RRULE:FREQ=YEARLY;BYMONTH=11;BYDAY=1SU\n'
+                'END:STANDARD\n'
+                'BEGIN:DAYLIGHT'
+                'DTSTART:19710101T020000\n'
+                'TZOFFSETTO:-0700\n'
+                'TZOFFSETFROM:-0800\n'
+                'TZNAME:PDT\n'
+                'RRULE:FREQ=YEARLY;BYMONTH=3;BYDAY=2SU\n'
+                'END:DAYLIGHT\n'
+                'END:VTIMEZONE\n')
         for child in table:
             class_contents = child.text.splitlines()
             if "To be arranged" in class_contents:
@@ -126,11 +146,10 @@ def export_ics(file, course_info, start_date, end_date):
     elif len(t) == 4:
         hr_2 = t[:2]
         min_2 = t[2:]
-    file.write('DTSTART:' + start_date + 'T' + hr_1 + min_1 + '00\n')
-    file.write('DTEND:' + start_date + 'T' + hr_2 + min_2 + '00\n')
+    file.write('DTSTART;TZID=America/Los_Angeles:' + start_date + 'T' + hr_1 + min_1 + '00\n')
+    file.write('DTEND;TZID=America/Los_Angeles:' + start_date + 'T' + hr_2 + min_2 + '00\n')
     file.write('SUMMARY:' + course_info[0] + '\n')
-    if '.' not in course_info[3].lower():
-        file.write('DESCRIPTION:' + 'room: https://www.washington.edu/maps/#!/' + course_info[3].lower() + '\n')
+    file.write('DESCRIPTION:' + course_info[3].lower() + '\n')
     file.write('END:VEVENT\n')
 
 
