@@ -1,5 +1,5 @@
 # Visual Schedule to ics
- Export your UW Class Schedule to an ics file that you could import into your calendar app such as Google Calendar or Outlook
+ Export your UW Class Schedule to an ics file that you could import into your calendar app such as Google Calendar or Outlook. The project has been moved to Java Gradle instead [to this repository](https://github.com/eyhc1/ScheduleMyClasses), Hence this repository is being archived.
 ## Use
  <s>You can either run the run.bat file</s>, for the latest version, you can just run the demo program `ClassConverter.exe` (Windows only) or if you can just edit `UWclasses_beta.py` and run it from there.
 ## Requires
